@@ -5,7 +5,10 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    background-color: pink;  /* Changed background color to pink */
+    background-color: pink;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 header {
@@ -58,6 +61,7 @@ header {
 }
 
 main {
+    flex: 1;
     max-width: 1200px;
     margin: 20px auto;
     padding: 0 20px;
@@ -67,6 +71,7 @@ main {
     display: flex;
     justify-content: space-between;
     margin-bottom: 40px;
+    margin-top: 40px;
 }
 
 .about-content {
@@ -89,13 +94,13 @@ main {
 
 .login-section {
     max-width: 300px;
-    margin-left: 40px;
+    margin-left: 250px;
 }
 
 .login-form {
     display: flex;
     flex-direction: column;
-    gap: 2px; /* Reduced gap between elements */
+    /*gap: 1px; /* Reduced gap between elements */
 }
 
 .login-form label {
@@ -112,6 +117,7 @@ main {
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 0.9em; /* Smaller font size */
+    margin-top: 0;
 }
 
 .login-form input[type="radio"] {
@@ -170,4 +176,3 @@ footer a {
 footer a:hover {
     text-decoration: underline;
 }
-
