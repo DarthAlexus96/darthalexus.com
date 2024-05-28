@@ -1,51 +1,80 @@
 <!DOCTYPE html>
-<html>
-   <head>
-      <title>Darth Alexus</title>
-      <link rel="Stylesheet" href="index.css">
-      <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" >
-   </head>
-   <body>
-   <p>
-      <table>
-         <tr>
-            <td> <a href="http://darthalexus.com"> <img src="home.png" height="25px" width="25px" /> </a> </td>
-         </tr>
-      </table>
-      <img src="jerry.png"
-           height="350px" width="230px"
-           alt="pic_not_working" />
-      <h3> My name is DarthAlexus.</h3>
-      <div>
-      <!-- <p class="sansserif"> -->
-      <p>
-      
-      This website is unfortunately currently under construction.
-      <br>
-      
-      The renewed site is expected to launch in June 2022. <br>
-         <!-- <h3> Obituary for Prof. Hans Neuhauser </h3> -->
-      </p>
-      </div>
-      <a href="http://open.spotify.com/user/1132953857" target="_blank"> <img src="spotify_logo.png" alt="Spotify" height="50px" width="50px"/></a>
-      <a href="http://github.com/DarthAlexus96" target="_blank"> <img src="github.png" alt="Github" height="50px" width="50px" /></a>
-      <a href="https://www.sololearn.com/Profile/7072030" target="_blank"> <img src="sololearn.png" alt="Sololearn" height="50px" width="50px"/></a>
-      <a href="https://www.deviantart.com/darthalexus" target="_blank"> <img src="deviant.png" alt="DeviantArt" height="50px" width="50px"/></a>
-      
-   
-   <form>
-   	<br/>
-    	<input type="text" name="username" /><br />
-    	<input type="password" name="password" /> <br/>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DarthAlexus</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-logo">
+                <a href="http://darthalexus.com">
+                    <img src="home.png" alt="Home" height="25" width="25">
+                    DarthAlexus
+                </a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="http://darthalexus.com">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#connect">Connect</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
     
-    	<input type="radio" name="sign" value="sign-up"/> Sign up <br/>
-    	<input type="radio" name="sign" value="log-in"/> Log in </br>
-    	</br>
-   <!-- <input type="submit" value="Submit" />  --> 
-   </form>
-      </p>
-      
-      <p><div id="mail"><br/>admin@darthalexus.com</div></p>
-
-   </body>
+    <main>
+        <section id="about" class="about-section">
+            <div class="about-content">
+                <img src="jerry.png" alt="Profile Picture" class="profile-img">
+                <div class="about-text">
+                    <h3>My name is DarthAlexus.</h3>
+                    <p>
+                        This website is unfortunately currently under construction.<br>
+                        The renewed site will launch in summer 2024.
+                    </p>
+                </div>
+            </div>
+            <aside class="login-section">
+                <h3>Log in or Sign up:</h3>
+                <form action="your_form_handler_url" method="post" class="login-form">
+                    <label for="username">Username:</label><br>
+                    <input type="text" id="username" name="username"><br>
+                    <label for="password">Password:</label><br>
+                    <input type="password" id="password" name="password"><br>
+                    <input type="radio" id="sign-up" name="sign" value="sign-up">
+                    <label for="sign-up">Sign up</label><br>
+                    <input type="radio" id="log-in" name="sign" value="log-in">
+                    <label for="log-in">Log in</label><br><br>
+                    <input type="submit" value="Submit">
+                </form>
+            </aside>
+        </section>
+        
+        <section id="connect" class="connect-section">
+            <h3>Connect with me:</h3>
+            <div class="social-links">
+                <a href="http://open.spotify.com/user/1132953857" target="_blank">
+                    <img src="spotify_logo.png" alt="Spotify" class="social-icon">
+                </a>
+                <a href="http://github.com/DarthAlexus96" target="_blank">
+                    <img src="github.png" alt="GitHub" class="social-icon">
+                </a>
+                <a href="https://www.sololearn.com/Profile/7072030" target="_blank">
+                    <img src="sololearn.png" alt="SoloLearn" class="social-icon">
+                </a>
+                <a href="https://www.deviantart.com/darthalexus" target="_blank">
+                    <img src="deviant.png" alt="DeviantArt" class="social-icon">
+                </a>
+            </div>
+        </section>
+    </main>
+    
+    <footer id="contact" class="footer">
+        <p>Contact: <a href="mailto:admin@darthalexus.com">admin@darthalexus.com</a></p>
+    </footer>
+</body>
 </html>
+

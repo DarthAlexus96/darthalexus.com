@@ -1,6 +1,173 @@
-body {background-color:pink;}
-h3 {color:blue;}
-p.sansserif {font-family: "Comic Sans MS", cursive, sans-serif;}
+/* index.css */
 
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: pink;  /* Changed background color to pink */
+}
 
-#mail {color:black; font-size:50%}
+header {
+    background-color: #333;
+    color: white;
+    padding: 10px 0;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.nav-logo a {
+    text-decoration: none;
+    color: white;
+    font-size: 1.5em;
+    display: flex;
+    align-items: center;
+}
+
+.nav-logo img {
+    margin-right: 10px;
+}
+
+.nav-links {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.nav-links li {
+    margin-left: 20px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: white;
+    font-size: 1em;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: #ddd;
+}
+
+main {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+.about-section {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 40px;
+}
+
+.about-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile-img {
+    width: 230px;
+    height: 350px;
+    object-fit: cover;
+    margin-top: 20px; /* Add margin to increase space between navbar and image */
+}
+
+.about-text {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.login-section {
+    max-width: 300px;
+    margin-left: 40px;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 2px; /* Reduced gap between elements */
+}
+
+.login-form label {
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
+    font-size: 0.9em; /* Smaller font size */
+}
+
+.login-form input[type="text"],
+.login-form input[type="password"] {
+    width: 100%;
+    padding: 5px; /* Further reduced padding */
+    margin: 1px 0; /* Further reduced margin */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 0.9em; /* Smaller font size */
+}
+
+.login-form input[type="radio"] {
+    margin-right: 3px; /* Reduced space between radio button and label */
+}
+
+.login-form input[type="submit"] {
+    width: 100%;
+    padding: 8px; /* Reduced padding */
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 0.9em; /* Smaller font size */
+}
+
+.login-form input[type="submit"]:hover {
+    background-color: #555;
+}
+
+.connect-section {
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.social-icon {
+    width: 50px;
+    height: 50px;
+    transition: transform 0.3s ease;
+}
+
+.social-icon:hover {
+    transform: scale(1.1);
+}
+
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+}
+
+footer a {
+    color: #ddd;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
