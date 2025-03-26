@@ -80,14 +80,14 @@ main {
     align-items: center;
 }
 
-.random-section {
+.jerry-section {
     display: flex;
     justify-content: space-between;
     margin-bottom: 40px;
     margin-top: 40px;
 }
 
-.random-content {
+.jerry-content {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -100,12 +100,20 @@ main {
     margin-top: 20px; /* Add margin to increase space between navbar and image */
 }
 
+.jerry-gif {
+    width: 460px;
+    height: 700px;
+    object-fit: cover;
+    margin-top: 40px; /* Add margin to increase space between navbar and image */
+}
+
+
 .about-text {
     margin-top: 20px;
     text-align: center;
 }
 
-.random-text {
+.jerry-text {
     margin-top: 20px;
     text-align: center;
 }
@@ -178,6 +186,30 @@ main {
 .social-icon:hover {
     transform: scale(1.1);
 }
+
+.jerry-page #rainCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 9999; /* Rain should be on top */
+}
+
+/* Add a semi-transparent dark aura to the background */
+.jerry-page::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);  /* Dark aura */
+    z-index: 9998;  /* Below the rain but still above the content */
+    pointer-events: none;  /* Prevents dark aura from blocking clicks */
+}
+
 
 footer {
     background-color: #333;
