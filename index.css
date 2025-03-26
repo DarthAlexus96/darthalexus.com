@@ -80,6 +80,19 @@ main {
     align-items: center;
 }
 
+.random-section {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 40px;
+    margin-top: 40px;
+}
+
+.random-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .profile-img {
     width: 230px;
     height: 350px;
@@ -88,6 +101,11 @@ main {
 }
 
 .about-text {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.random-text {
     margin-top: 20px;
     text-align: center;
 }
