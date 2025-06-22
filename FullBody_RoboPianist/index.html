@@ -21,8 +21,12 @@
     width: 100vw;
     height: 100vh;
     transform: translate(-50%, -50%);
-    object-fit: cover;
+    object-fit: cover; /* default */
+    background: black;
     z-index: 0;
+  }
+  video.fullscreen-contain {
+    object-fit: contain;
   }
   .content {
     position: relative;
@@ -40,46 +44,63 @@
     cursor: pointer;
     text-decoration: underline;
   }
+  .clickable + .clickable {
+    margin-top: 10px;
+  }
 </style>
 </head>
 <body>
 
   <video id="myVideo" autoplay muted loop playsinline>
-    <source src="my_favorite_things.mp4" type="video/mp4" />
+    <source id="videoSource" src="my_favorite_things.mp4" type="video/mp4" />
     Your browser does not support the video tag.
   </video>
-
+  
   <div class="content">
     <h1>Welcome to the Full-Body RoboPianist</h1>
     <p>
       Available Songs: <br> 
-      <span id="fullscreenBtn" class="clickable">My Favorite Things</span>
+      <span id="fullscreenBtn" class="clickable">My Favorite Things</span><br>
+      <span id="fullscreenBtnTwinkle" class="clickable">Twinkle Twinkle</span>
     </p>
   </div>
 
 <script>
   const video = document.getElementById('myVideo');
-  const btn = document.getElementById('fullscreenBtn');
+  const source = document.getElementById('videoSource');
 
-  btn.addEventListener('click', () => {
-  if (video.requestFullscreen) {
-    video.requestFullscreen();
-  } else if (video.webkitRequestFullscreen) { /* Safari */
-    video.webkitRequestFullscreen();
-  } else if (video.msRequestFullscreen) { /* IE11 */
-    video.msRequestFullscreen();
+  const btn1 = document.getElementById('fullscreenBtn');
+  const btn2 = document.getElementById('fullscreenBtnTwinkle');
+
+  function playVideoFullscreen(videoUrl) {
+    source.src = videoUrl;
+    video.load();
+    video.muted = false;
+    video.play();
+
+    if (video.requestFullscreen) {
+      video.requestFullscreen();
+    } else if (video.webkitRequestFullscreen) {
+      video.webkitRequestFullscreen();
+    } else if (video.msRequestFullscreen) {
+      video.msRequestFullscreen();
+    }
   }
-  
-  // Unmute and play with sound after user clicks
-  video.muted = false;
-  video.play();
-});
 
+  btn1.addEventListener('click', () => {
+    playVideoFullscreen('my_favorite_things.mp4');
+  });
 
-  // Optional: when video enters fullscreen, make sure it plays
+  btn2.addEventListener('click', () => {
+    playVideoFullscreen('twinkle_twinkle.mp4');
+  });
+
   video.addEventListener('fullscreenchange', () => {
     if (document.fullscreenElement === video) {
+      video.classList.add('fullscreen-contain');
       video.play();
+    } else {
+      video.classList.remove('fullscreen-contain');
     }
   });
 </script>
