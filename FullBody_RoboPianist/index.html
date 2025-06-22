@@ -1,51 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Video | DarthAlexus</title>
-  <style>
-    html, body {
-      margin: 0; 
-      padding: 0; 
-      height: 100%; 
-      background: black;
-      overflow: hidden;
-    }
-    video {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      min-width: 100%;
-      min-height: 100%;
-      width: auto;
-      height: auto;
-      transform: translate(-50%, -50%);
-      object-fit: cover;
-      z-index: -1;
-    }
-    .content {
-      position: relative;
-      z-index: 10;
-      color: white;
-      font-family: sans-serif;
-      text-align: center;
-      padding: 20px;
-      top: 20px;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Fullscreen Video Trigger | DarthAlexus</title>
+<style>
+  html, body {
+    margin: 0; padding: 0; height: 100%; background: black; overflow: hidden;
+    font-family: sans-serif;
+    color: white;
+  }
+  body {
+    position: relative;
+    height: 100vh;
+  }
+  video {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 100vw;
+    height: 100vh;
+    transform: translate(-50%, -50%);
+    object-fit: cover;
+    z-index: 0;
+  }
+  .content {
+    position: relative;
+    z-index: 10;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 20px;
+    background: rgba(0,0,0,0.3);
+  }
+  .clickable {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+</style>
 </head>
 <body>
 
-  <video autoplay muted loop playsinline>
+  <video id="myVideo" autoplay muted loop playsinline>
     <source src="my_favorite_things.mp4" type="video/mp4" />
     Your browser does not support the video tag.
   </video>
 
   <div class="content">
     <h1>Welcome to the Full-Body RoboPianist</h1>
-    <p>Enjoy 'My Favorite Things'</p>
+    <p>
+      Available Songs: <br> 
+      <span id="fullscreenBtn" class="clickable">My Favorite Things</span>
+    </p>
   </div>
+
+<script>
+  const video = document.getElementById('myVideo');
+  const btn = document.getElementById('fullscreenBtn');
+
+  btn.addEventListener('click', () => {
+  if (video.requestFullscreen) {
+    video.requestFullscreen();
+  } else if (video.webkitRequestFullscreen) { /* Safari */
+    video.webkitRequestFullscreen();
+  } else if (video.msRequestFullscreen) { /* IE11 */
+    video.msRequestFullscreen();
+  }
+  
+  // Unmute and play with sound after user clicks
+  video.muted = false;
+  video.play();
+});
+
+
+  // Optional: when video enters fullscreen, make sure it plays
+  video.addEventListener('fullscreenchange', () => {
+    if (document.fullscreenElement === video) {
+      video.play();
+    }
+  });
+</script>
 
 </body>
 </html>
