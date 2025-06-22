@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Video | DarthAlexus</title>
+  <style>
+    html, body {
+      margin: 0; 
+      padding: 0; 
+      height: 100%; 
+      background: black;
+      overflow: hidden;
+    }
+    video {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      min-width: 100%;
+      min-height: 100%;
+      width: auto;
+      height: auto;
+      transform: translate(-50%, -50%);
+      object-fit: cover;
+      z-index: -1;
+    }
+    .content {
+      position: relative;
+      z-index: 10;
+      color: white;
+      font-family: sans-serif;
+      text-align: center;
+      padding: 20px;
+      top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <video autoplay muted loop playsinline>
+    <source src="assets/videos/highres-video.mp4" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+
+  <div class="content">
+    <h1>Welcome to the Video Page</h1>
+    <p>Enjoy the fullscreen video experience.</p>
+  </div>
+
+</body>
+</html>
+
