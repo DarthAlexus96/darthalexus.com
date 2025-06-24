@@ -21,7 +21,7 @@
     width: 100vw;
     height: 100vh;
     transform: translate(-50%, -50%);
-    object-fit: cover; /* default */
+    object-fit: cover;
     background: black;
     z-index: 0;
   }
@@ -38,7 +38,14 @@
     align-items: center;
     text-align: center;
     padding: 0 20px;
-    background: rgba(0, 0, 0, 0.6); /* darker overlay */
+    background: rgba(0,0,0,0.5);
+  }
+  .caption {
+    background: rgba(0, 0, 0, 0.6);
+    padding: 12px 16px;
+    margin: 20px 0;
+    border-radius: 8px;
+    max-width: 500px;
   }
   .clickable {
     cursor: pointer;
@@ -47,15 +54,18 @@
   .clickable + .clickable {
     margin-top: 10px;
   }
-  .training-status {
-    background: rgba(0, 0, 0, 0.5);
-    padding: 12px 18px;
+  #muteToggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    border: none;
+    padding: 10px 16px;
     border-radius: 8px;
-    margin: 1.5rem 0;
-    font-size: 1.05rem;
-    line-height: 1.6;
-    color: #ddd;
-    max-width: 500px;
+    cursor: pointer;
+    font-size: 16px;
   }
 </style>
 </head>
@@ -75,25 +85,18 @@
       <span id="fullscreenBtn" class="clickable">My Favorite Things</span><br>
       <span id="fullscreenBtnTwinkle" class="clickable">Twinkle Twinkle</span><br>
       <br>
-      It has already learned others successfully,<br> but those videos aren’t available yet.<br>
-      <em>Improved recordings will be coming soon!</em>
+      It has already learned others successfully,<br> but their performance videos aren’t available yet.<br>
+      <em>Improved recordings will be added soon!</em>
     </div>
 
-    <!--
-    <p>
-      Available Songs: <br> 
-      <span id="fullscreenBtn" class="clickable">My Favorite Things</span><br>
-      <span id="fullscreenBtnTwinkle" class="clickable">Twinkle Twinkle</span>
-    </p>
-    -->
-  </div>
+  <button id="muteToggle">🔊 Unmute</button>
 
 <script>
   const video = document.getElementById('myVideo');
   const source = document.getElementById('videoSource');
-
   const btn1 = document.getElementById('fullscreenBtn');
   const btn2 = document.getElementById('fullscreenBtnTwinkle');
+  const muteToggle = document.getElementById('muteToggle');
 
   function playVideoFullscreen(videoUrl) {
     source.src = videoUrl;
@@ -125,6 +128,12 @@
     } else {
       video.classList.remove('fullscreen-contain');
     }
+  });
+
+  muteToggle.addEventListener('click', () => {
+    video.muted = !video.muted;
+    muteToggle.textContent = video.muted ? '🔊 Unmute' : '🔇 Mute';
+    video.volume = video.muted ? 0 : 1.0;
   });
 </script>
 
