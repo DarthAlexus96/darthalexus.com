@@ -1,16 +1,20 @@
-/* index.css */
+/* Reset & base */
+* {
+    box-sizing: border-box;
+}
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
     background-color: pink;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    color: #333;
 }
 
+/* Header & Navbar */
 header {
     background-color: #111;
     color: white;
@@ -32,6 +36,7 @@ header {
     font-size: 1.5em;
     display: flex;
     align-items: center;
+    font-weight: bold;
 }
 
 .nav-logo img {
@@ -39,10 +44,10 @@ header {
 }
 
 .nav-links {
-    list-style-type: none;
+    list-style: none;
+    display: flex;
     margin: 0;
     padding: 0;
-    display: flex;
 }
 
 .nav-links li {
@@ -60,121 +65,117 @@ header {
     color: #ddd;
 }
 
+/* Main Layout */
 main {
     flex: 1;
-    max-width: 1200px;
-    margin: 20px auto;
+    max-width: 1000px;
+    margin: 40px auto;
     padding: 0 20px;
 }
 
-.about-section {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 40px;
-    margin-top: 40px;
-}
-
-.about-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
+/* Section Layouts */
+.about-section,
 .jerry-section {
     display: flex;
-    justify-content: space-between;
-    margin-bottom: 40px;
-    margin-top: 40px;
+    flex-wrap: wrap;
+    gap: 40px;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 60px;
 }
 
+.about-content,
 .jerry-content {
     display: flex;
     flex-direction: column;
     align-items: center;
+    max-width: 500px;
+    text-align: center;
+}
+
+.about-text,
+.jerry-text {
+    margin-top: 20px;
+    font-size: 1.1em;
+    line-height: 1.6;
+}
+
+/* Images */
+.profile-img,
+.jerry-gif {
+    border-radius: 12px;
+    object-fit: cover;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .profile-img {
     width: 230px;
     height: 350px;
-    object-fit: cover;
-    margin-top: 20px; /* Add margin to increase space between navbar and image */
 }
 
 .jerry-gif {
     width: 460px;
     height: 700px;
-    object-fit: cover;
-    margin-top: 40px; /* Add margin to increase space between navbar and image */
 }
 
-
-.about-text {
-    margin-top: 20px;
-    text-align: center;
-}
-
-.jerry-text {
-    margin-top: 20px;
-    text-align: center;
-}
-
+/* Login */
 .login-section {
-    max-width: 300px;
-    margin-left: 250px;
+    max-width: 350px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
 .login-form {
     display: flex;
     flex-direction: column;
-    /*gap: 1px; /* Reduced gap between elements */
+    gap: 12px;
 }
 
 .login-form label {
-    margin: 0; /* Remove default margin */
-    padding: 0; /* Remove default padding */
-    font-size: 0.9em; /* Smaller font size */
+    font-size: 0.95em;
+    font-weight: bold;
 }
 
 .login-form input[type="text"],
 .login-form input[type="password"] {
-    width: 100%;
-    padding: 5px; /* Further reduced padding */
-    margin: 1px 0; /* Further reduced margin */
+    padding: 8px;
     border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 0.9em; /* Smaller font size */
-    margin-top: 0;
+    border-radius: 6px;
+    font-size: 1em;
 }
 
 .login-form input[type="radio"] {
-    margin-right: 3px; /* Reduced space between radio button and label */
+    margin-right: 6px;
 }
 
 .login-form input[type="submit"] {
-    width: 100%;
-    padding: 8px; /* Reduced padding */
+    padding: 10px;
     background-color: #333;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    font-size: 0.9em; /* Smaller font size */
 }
 
 .login-form input[type="submit"]:hover {
     background-color: #555;
 }
 
+/* Social */
 .connect-section {
-    margin-bottom: 40px;
     text-align: center;
+    margin: 60px 0;
 }
 
 .social-links {
     display: flex;
     justify-content: center;
-    gap: 20px;
+    gap: 30px;
+    margin-top: 20px;
 }
 
 .social-icon {
@@ -187,6 +188,7 @@ main {
     transform: scale(1.1);
 }
 
+/* Rain effect */
 .jerry-page #rainCanvas {
     position: fixed;
     top: 0;
@@ -194,10 +196,9 @@ main {
     width: 100vw;
     height: 100vh;
     pointer-events: none;
-    z-index: 9999; /* Rain should be on top */
+    z-index: 9999;
 }
 
-/* Add a semi-transparent dark aura to the background */
 .jerry-page::before {
     content: "";
     position: fixed;
@@ -205,17 +206,18 @@ main {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(0, 0, 0, 0.5);  /* Dark aura */
-    z-index: 9998;  /* Below the rain but still above the content */
-    pointer-events: none;  /* Prevents dark aura from blocking clicks */
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9998;
+    pointer-events: none;
 }
 
-
+/* Footer */
 footer {
     background-color: #111;
     color: white;
     text-align: center;
     padding: 20px 0;
+    font-size: 0.9em;
 }
 
 footer a {
@@ -226,3 +228,4 @@ footer a {
 footer a:hover {
     text-decoration: underline;
 }
+
