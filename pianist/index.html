@@ -171,7 +171,7 @@
     </div>
   </div>
 
-  <button id="muteToggle" class="control-button">🔊</button>
+  <button id="muteToggle" class="control-button">🔊 Unmute</button>
   <button id="fullScreenToggle" class="control-button">⛶</button> <button id="backButton" class="control-button"><strong>← Back</strong></button>
 
   <script>
@@ -219,7 +219,7 @@
 
     muteToggle.addEventListener('click', () => {
       video.muted = !video.muted;
-      muteToggle.textContent = video.muted ? '🔊' : '🔇';
+      muteToggle.textContent = video.muted ? '🔊 Unmute' : '🔇 Mute';
       video.volume = video.muted ? 0 : 1.0;
     });
 
