@@ -108,19 +108,20 @@
       cursor: pointer;
       font-size: 16px;
     }
+    /* Mute button on its own */
     #muteToggle {
       bottom: 20px;
       right: 20px;
     }
-    #fullScreenToggle { /* New style for fullscreen button */
+    /* Fullscreen button positioned to the left of the mute button */
+    #fullScreenToggle {
       bottom: 20px;
-      right: 120px; /* Position to the left of muteToggle */
-      display: none; /* Hidden by default */
+      right: 120px; /* Adjust this value if your mute button's width changes */
     }
     #backButton {
       top: 20px;
       left: 20px;
-      display: none;
+      display: none; /* Only visible when video is playing */
     }
   </style>
 </head>
@@ -170,26 +171,26 @@
     </div>
   </div>
 
-  <button id="muteToggle" class="control-button">🔊 Unmute</button>
-  <button id="fullScreenToggle" class="control-button">⤢ Fullscreen</button> <button id="backButton" class="control-button">← Back</button>
+  <button id="muteToggle" class="control-button">🔊</button>
+  <button id="fullScreenToggle" class="control-button">⛶</button> <button id="backButton" class="control-button"><strong>← Back</strong></button>
 
   <script>
     const video = document.getElementById('myVideo');
     const source = document.getElementById('videoSource');
     const muteToggle = document.getElementById('muteToggle');
-    const fullScreenToggle = document.getElementById('fullScreenToggle'); // Get new button
+    const fullScreenToggle = document.getElementById('fullScreenToggle');
     const contentWrapperDiv = document.querySelector('.content-wrapper');
     const backButton = document.getElementById('backButton');
 
     function showContent() {
       contentWrapperDiv.classList.remove('hidden');
       backButton.style.display = 'none';
-      muteToggle.style.display = 'block';
-      fullScreenToggle.style.display = 'none'; // Hide fullscreen button
+      muteToggle.style.display = 'block'; // Mute button always visible
+      fullScreenToggle.style.display = 'block'; // Fullscreen button always visible
       video.muted = true;
       video.pause();
       video.currentTime = 0;
-      source.src = "twinkle_twinkle.mp4";
+      source.src = "twinkle_twinkle.mp4"; // Reset to default background video
       video.load();
       video.play();
     }
@@ -197,8 +198,8 @@
     function hideContent() {
       contentWrapperDiv.classList.add('hidden');
       backButton.style.display = 'block';
-      muteToggle.style.display = 'none'; // Hide mute button when video is playing
-      fullScreenToggle.style.display = 'block'; // Show fullscreen button
+      muteToggle.style.display = 'block'; // Mute button always visible
+      fullScreenToggle.style.display = 'block'; // Fullscreen button always visible
     }
 
     document.querySelectorAll('.clickable').forEach(el => {
@@ -206,7 +207,7 @@
         const newSrc = el.getAttribute('data-src');
         source.src = newSrc;
         video.load();
-        video.muted = false;
+        video.muted = false; // Unmute when a specific video is selected
         video.play();
         hideContent();
       });
@@ -218,11 +219,10 @@
 
     muteToggle.addEventListener('click', () => {
       video.muted = !video.muted;
-      muteToggle.textContent = video.muted ? '🔊 Unmute' : '🔇 Mute';
+      muteToggle.textContent = video.muted ? '🔊' : '🔇';
       video.volume = video.muted ? 0 : 1.0;
     });
 
-    // New Fullscreen Toggle functionality
     fullScreenToggle.addEventListener('click', () => {
       if (video.requestFullscreen) {
         video.requestFullscreen();
@@ -233,22 +233,20 @@
       }
     });
 
-    // Handle fullscreen changes
-    // This listener is useful if the user exits fullscreen via ESC key etc.
+    // Handle fullscreen changes (e.g., if user exits fullscreen via ESC key)
     document.addEventListener('fullscreenchange', () => {
-        if (!document.fullscreenElement) { // If not in fullscreen mode
-            // You might want to decide if you want to show content or remain in video view
-            // For now, if exiting fullscreen, we will show content (as if "Back" was pressed)
-            // Or you could just keep the video playing in its current view.
-            // Let's keep the video playing in its normal view if fullscreen is exited without pressing 'Back'.
-            // No action needed here unless you want to explicitly hide contentWrapperDiv or change buttons.
+        if (!document.fullscreenElement) {
+            // When exiting fullscreen, we want the video to continue playing
+            // in its current view with controls.
+            // No explicit action is needed here because hideContent() already ensures
+            // mute and fullscreen buttons are visible when a specific video is playing,
+            // and the video itself continues playback.
         }
     });
 
-
     // Initial state setup
     document.addEventListener('DOMContentLoaded', () => {
-        showContent();
+        showContent(); // Ensures all buttons are in correct initial state
     });
 
   </script>
