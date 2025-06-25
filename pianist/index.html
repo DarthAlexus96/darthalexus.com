@@ -137,21 +137,18 @@
 
   <div class="overlay"></div>
 
-  <!-- New wrapper div for the main content -->
   <div class="content-wrapper">
-    <div class="content"> <!-- The original 'content' class is now inside the new wrapper -->
-      <h1>Welcome to the<br>Full-Body RoboPianist</h1>
+    <div class="content"> <h1>Welcome to the<br>Full-Body RoboPianist</h1>
       
       <div class="perform">
         <h3>Watch the robot perform:</h3>
-        <span class="clickable" data-src="twinkle_twinkle.mp4"> 🌠 Twinkle Twinkle (fully learned)</span>
+        <span class="clickable" data-src="twinkle_twinkle.mp4">Twinkle Twinkle (fully learned)</span>
       </div>
 
       <div class="training-status">
-         <!-- Changed style for hr here -->
-        <hr style="margin: 20px auto; width: 60%; border: 0; border-top: 1px solid rgba(255,255,255,0.3);">
+          <hr style="margin: 20px auto; width: 60%; border: 0; border-top: 1px solid rgba(255,255,255,0.3);">
 
-        🎹 <strong>Training in Progress</strong><br>
+        <strong>Training in Progress</strong><br>
         Our robot is currently learning new pieces:<br>
         <span class="clickable" data-src="my_favorite_things.mp4">My Favorite Things</span>
         <span class="clickable" data-src="bach_invention4.mp4">Bach – Invention No. 4</span>
@@ -162,7 +159,7 @@
         <span class="clickable" data-src="diabelli_sonatina.mp4">Diabelli – Sonatina</span>
 
         <div class="note">
-          🧠 <strong>Please note:</strong><br>
+          <strong>Please note:</strong><br>
           Only <em>Twinkle Twinkle</em> shows a complete performance<br>
           after the robot has fully mastered the piece.<br>
           The other videos show the robot <em>still in the process of learning</em>.<br><br>
@@ -173,10 +170,7 @@
           The full code for this project will be published soon on GitHub: <a href="https://github.com/DarthAlexus96" target="_blank" style="color: rgba(255, 255, 255, 0.7);">DarthAlexus96</a>
         </div>
       </div>
-    </div> <!-- End of original 'content' div -->
-  </div> <!-- End of new 'content-wrapper' div -->
-
-  <button id="muteToggle" class="control-button">🔊</button>
+    </div> </div> <button id="muteToggle" class="control-button">🔊</button>
   <button id="fullScreenToggle" class="control-button">⛶</button>
   <button id="backButton" class="control-button">← Back</button>
 
@@ -192,7 +186,7 @@
       contentWrapperDiv.classList.remove('hidden');
       backButton.style.display = 'none';
       muteToggle.style.display = 'block'; // Mute button always visible
-      fullScreenToggle.style.display = 'block'; // Fullscreen button always visible
+      fullScreenToggle.style.display = 'none'; // **Hide fullscreen button when content is shown**
       video.muted = true;
       video.pause();
       video.currentTime = 0;
@@ -205,7 +199,7 @@
       contentWrapperDiv.classList.add('hidden');
       backButton.style.display = 'block';
       muteToggle.style.display = 'block'; // Mute button always visible
-      fullScreenToggle.style.display = 'block'; // Fullscreen button always visible
+      fullScreenToggle.style.display = 'block'; // **Show fullscreen button when content is hidden (video playing)**
     }
 
     document.querySelectorAll('.clickable').forEach(el => {
@@ -259,4 +253,3 @@
 
 </body>
 </html>
-
