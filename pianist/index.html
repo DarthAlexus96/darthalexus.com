@@ -1,141 +1,209 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Full-Body RoboPianist</title>
-<style>
-  html, body {
-    margin: 0; padding: 0; height: 100%; background: black; overflow: hidden;
-    font-family: sans-serif;
-    color: white;
-  }
-  body {
-    position: relative;
-    height: 100vh;
-  }
-  video {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    width: 100vw;
-    height: 100vh;
-    transform: translate(-50%, -50%);
-    object-fit: cover;
-    background: black;
-    z-index: 0;
-  }
-  video.fullscreen-contain {
-    object-fit: contain;
-  }
-  .content {
-    position: relative;
-    z-index: 10;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 0 20px;
-    background: rgba(0,0,0,0.5);
-  }
-  .caption {
-    background: rgba(0, 0, 0, 0.6);
-    padding: 12px 16px;
-    margin: 20px 0;
-    border-radius: 8px;
-    max-width: 500px;
-  }
-  .clickable {
-    cursor: pointer;
-    text-decoration: underline;
-  }
-  .clickable + .clickable {
-    margin-top: 10px;
-  }
-  #muteToggle {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 1000;
-    background: rgba(0, 0, 0, 0.6);
-    color: white;
-    border: none;
-    padding: 10px 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Full-Body RoboPianist</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: black;
+      overflow: hidden;
+      font-family: sans-serif;
+      color: white;
+    }
+    body {
+      position: relative;
+      height: 100vh;
+    }
+    video {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: 100vw;
+      height: 100vh;
+      transform: translate(-50%, -50%);
+      object-fit: cover;
+      background: black;
+      z-index: 0;
+    }
+    video.fullscreen-contain {
+      object-fit: contain;
+    }
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1;
+    }
+    .content {
+      position: relative;
+      z-index: 2;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      text-align: center;
+      padding: 0 20px;
+    }
+    h1 {
+      font-size: 2.5em;
+      margin-top: 60px;
+      margin-bottom: 0.5em;
+    }
+    .training-status {
+      padding: 16px 24px;
+      max-width: 700px;
+      font-size: 0.9em;
+      margin-top: auto;
+      margin-bottom: 40px;
+    }
+    .perform {
+      padding: 16px 24px;
+      max-width: 700px;
+      font-size: 2.0em;
+      margin-top: 40px;
+      margin-bottom: 40px;
+    }
+    .clickable {
+      cursor: pointer;
+      text-decoration: underline;
+      display: block;
+      margin-top: 6px;
+    }
+    .training-status em,
+    .training-status small {
+      font-size: 0.8em;
+      color: rgba(255, 255, 255, 0.7);
+    }
+    .training-status .note {
+      margin-top: 24px;
+      font-size: 0.75em;
+      color: rgba(255, 255, 255, 0.6);
+    }
+    #muteToggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 3;
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+  </style>
 </head>
 <body>
 
   <video id="myVideo" autoplay muted loop playsinline>
-    <source id="videoSource" src="my_favorite_things.mp4" type="video/mp4" />
+    <source id="videoSource" src="twinkle_twinkle.mp4" type="video/mp4" />
     Your browser does not support the video tag.
   </video>
-  
+
+  <div class="overlay"></div>
+
   <div class="content">
     <h1>Welcome to the<br>Full-Body RoboPianist</h1>
+    
+    <div class="perform">
+    <h3>Watch the robot perform:</h3>
+    <span class="clickable" data-src="twinkle_twinkle.mp4"> 🌠 Twinkle Twinkle (fully learned)</span>
+    </div>
 
     <div class="training-status">
+       <!--
+      🎬 <strong>Watch the robot perform:</strong><br>
+      <span class="clickable" data-src="twinkle_twinkle.mp4">🎹 Twinkle Twinkle (fully learned)</span>-->
+
+      <hr style="margin: 20px 0; width: 60%; border: 0; border-top: 1px solid rgba(255,255,255,0.3);">
+
       🎹 <strong>Training in Progress</strong><br>
       Our robot is currently learning new pieces:<br>
-      <span id="fullscreenBtn" class="clickable">My Favorite Things</span><br>
-      <span id="fullscreenBtnTwinkle" class="clickable">Twinkle Twinkle</span><br>
-      <br>
-      It has already learned others successfully,<br> but their performance videos aren’t available yet.<br>
-      <em>Improved recordings will be added soon!</em>
+      <span class="clickable" data-src="my_favorite_things.mp4">My Favorite Things</span>
+      <span class="clickable" data-src="bach_invention4.mp4">Bach – Invention No. 4</span>
+      <span class="clickable" data-src="tchaikovsky_new_puppet.mp4">Tchaikovsky – New Puppet</span>
+      <span class="clickable" data-src="chopin_prelude.mp4">Chopin – Prelude</span>
+      <span class="clickable" data-src="mozart_funeral_march.mp4">Mozart – Funeral March</span>
+      <span class="clickable" data-src="time_to_pretend.mp4">MGMT – Time to Pretend</span>
+      <span class="clickable" data-src="diabelli_sonatina.mp4">Diabelli – Sonatina</span>
+
+      <div class="note">
+        🧠 <strong>Please note:</strong><br>
+        Only <em>Twinkle Twinkle</em> shows a complete performance<br>
+        after the robot has fully mastered the piece.<br>
+        The other videos show the robot <em>still in the process of learning</em>.<br><br>
+        <em>Improved and polished recordings will be added soon!</em>
+      </div>
     </div>
+  </div>
 
   <button id="muteToggle">🔊 Unmute</button>
 
-<script>
-  const video = document.getElementById('myVideo');
-  const source = document.getElementById('videoSource');
-  const btn1 = document.getElementById('fullscreenBtn');
-  const btn2 = document.getElementById('fullscreenBtnTwinkle');
-  const muteToggle = document.getElementById('muteToggle');
+  <script>
+    const video = document.getElementById('myVideo');
+    const source = document.getElementById('videoSource');
+    const muteToggle = document.getElementById('muteToggle');
 
-  function playVideoFullscreen(videoUrl) {
-    source.src = videoUrl;
-    video.load();
-    video.muted = false;
-    video.play();
+    const videos = {
+      fullscreenBtnTwinkle: "twinkle_twinkle.mp4",
+      fullscreenBtn1: "my_favorite_things.mp4",
+      fullscreenBtn2: "bach_invention4.mp4",
+      fullscreenBtn3: "tchaikovsky_new_puppet.mp4",
+      fullscreenBtn4: "chopin_prelude.mp4",
+      fullscreenBtn5: "mozart_funeral_march.mp4",
+      fullscreenBtn6: "time_to_pretend.mp4",
+      fullscreenBtn7: "diabelli_sonatina.mp4"
+    };
 
-    if (video.requestFullscreen) {
-      video.requestFullscreen();
-    } else if (video.webkitRequestFullscreen) {
-      video.webkitRequestFullscreen();
-    } else if (video.msRequestFullscreen) {
-      video.msRequestFullscreen();
-    }
-  }
-
-  btn1.addEventListener('click', () => {
-    playVideoFullscreen('my_favorite_things.mp4');
-  });
-
-  btn2.addEventListener('click', () => {
-    playVideoFullscreen('twinkle_twinkle.mp4');
-  });
-
-  video.addEventListener('fullscreenchange', () => {
-    if (document.fullscreenElement === video) {
-      video.classList.add('fullscreen-contain');
+    function playVideoFullscreen(videoUrl) {
+      source.src = videoUrl;
+      video.load();
+      video.muted = false;
       video.play();
-    } else {
-      video.classList.remove('fullscreen-contain');
-    }
-  });
 
-  muteToggle.addEventListener('click', () => {
-    video.muted = !video.muted;
-    muteToggle.textContent = video.muted ? '🔊 Unmute' : '🔇 Mute';
-    video.volume = video.muted ? 0 : 1.0;
-  });
-</script>
+      if (video.requestFullscreen) {
+        video.requestFullscreen();
+      } else if (video.webkitRequestFullscreen) {
+        video.webkitRequestFullscreen();
+      } else if (video.msRequestFullscreen) {
+        video.msRequestFullscreen();
+      }
+    }
+
+    document.querySelectorAll('.clickable').forEach(el => {
+      el.addEventListener('click', () => {
+        const newSrc = el.getAttribute('data-src');
+        source.src = newSrc;
+        video.load();
+        video.play();
+        video.muted = false;
+      });
+    });
+
+    video.addEventListener('fullscreenchange', () => {
+      if (document.fullscreenElement === video) {
+        video.classList.add('fullscreen-contain');
+        video.play();
+      } else {
+        video.classList.remove('fullscreen-contain');
+      }
+    });
+
+    muteToggle.addEventListener('click', () => {
+      video.muted = !video.muted;
+      muteToggle.textContent = video.muted ? '🔊 Unmute' : '🔇 Mute';
+      video.volume = video.muted ? 0 : 1.0;
+    });
+  </script>
 
 </body>
 </html>
