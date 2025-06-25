@@ -12,14 +12,14 @@
       background: black;
       font-family: sans-serif;
       color: white;
-      overflow-y: auto;
-      overflow-x: hidden;
+      overflow-y: auto; /* Allow vertical scrolling on the body if content overflows */
+      overflow-x: hidden; /* Prevent horizontal scrolling */
     }
     body {
       position: relative;
     }
     video {
-      position: fixed;
+      position: fixed; /* Keep video fixed in background */
       top: 50%;
       left: 50%;
       width: 100vw;
@@ -30,7 +30,7 @@
       z-index: 0;
     }
     .overlay {
-      position: fixed;
+      position: fixed; /* Keep overlay fixed over video */
       top: 0;
       left: 0;
       width: 100vw;
@@ -38,23 +38,23 @@
       background: rgba(0, 0, 0, 0.5);
       z-index: 1;
     }
-    .content-wrapper {
-      position: relative;
-      z-index: 2;
-      min-height: 100vh;
+    .content-wrapper { /* New wrapper for content to manage scrolling */
+      position: relative; /* Relative to allow z-index to work */
+      z-index: 2; /* Above video and overlay */
+      min-height: 100vh; /* Ensure it's at least viewport height */
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
       align-items: center;
       text-align: center;
       padding: 0 20px;
-      padding-bottom: 80px;
-      box-sizing: border-box;
-      transition: opacity 0.5s ease-in-out;
+      padding-bottom: 80px; /* Add padding for buttons at bottom */
+      box-sizing: border-box; /* Include padding in height calculation */
+      transition: opacity 0.5s ease-in-out; /* Smooth transition for content */
     }
     .content-wrapper.hidden {
       opacity: 0;
-      pointer-events: none;
+      pointer-events: none; /* Disable interaction when hidden */
     }
     h1 {
       font-size: 2.5em;
@@ -65,8 +65,8 @@
       padding: 16px 24px;
       max-width: 700px;
       font-size: 0.9em;
-      margin-top: auto;
-      margin-bottom: 0;
+      margin-top: auto; /* Pushes this section to the bottom */
+      margin-bottom: 0; /* Remove bottom margin here, handled by content-wrapper padding */
     }
     .perform {
       padding: 16px 24px;
@@ -99,24 +99,27 @@
     /* Common button styles */
     .control-button {
       position: fixed;
-      z-index: 4;
+      z-index: 4; /* Ensure buttons are above content-wrapper */
       background: rgba(0, 0, 0, 0.6);
       color: white;
       border: none;
       padding: 10px 16px;
       border-radius: 8px;
       cursor: pointer;
-      font-size: 16px;
+      font-size: 16px; /* Consistent size for symbols */
+      line-height: 1; /* Helps vertically align symbols within button */
     }
-    /* Mute button on its own */
-    #muteToggle {
+    /* Fullscreen button at the very bottom right */
+    #fullScreenToggle {
       bottom: 20px;
       right: 20px;
     }
-    /* Fullscreen button positioned to the left of the mute button */
-    #fullScreenToggle {
-      bottom: 20px;
-      right: 120px; /* Adjust this value if your mute button's width changes */
+    /* Mute button directly above the fullscreen button */
+    #muteToggle {
+      /* Calculate 'bottom' based on #fullScreenToggle's bottom + its estimated height + desired gap */
+      /* Assuming a button height of ~36px (padding 10px*2 + font-size 16px) + 10px gap */
+      bottom: calc(20px + 36px + 10px); /* 20px (fullscreen bottom) + 36px (button height) + 10px (gap) = 66px */
+      right: 20px; /* Align with fullscreen button */
     }
     #backButton {
       top: 20px;
@@ -134,8 +137,9 @@
 
   <div class="overlay"></div>
 
+  <!-- New wrapper div for the main content -->
   <div class="content-wrapper">
-    <div class="content">
+    <div class="content"> <!-- The original 'content' class is now inside the new wrapper -->
       <h1>Welcome to the<br>Full-Body RoboPianist</h1>
       
       <div class="perform">
@@ -144,7 +148,8 @@
       </div>
 
       <div class="training-status">
-         <hr style="margin: 20px auto; width: 60%; border: 0; border-top: 1px solid rgba(255,255,255,0.3);">
+         <!-- Changed style for hr here -->
+        <hr style="margin: 20px auto; width: 60%; border: 0; border-top: 1px solid rgba(255,255,255,0.3);">
 
         🎹 <strong>Training in Progress</strong><br>
         Our robot is currently learning new pieces:<br>
@@ -168,11 +173,12 @@
           The full code for this project will be published soon on GitHub: <a href="https://github.com/DarthAlexus96" target="_blank" style="color: rgba(255, 255, 255, 0.7);">DarthAlexus96</a>
         </div>
       </div>
-    </div>
-  </div>
+    </div> <!-- End of original 'content' div -->
+  </div> <!-- End of new 'content-wrapper' div -->
 
-  <button id="muteToggle" class="control-button">🔊 Unmute</button>
-  <button id="fullScreenToggle" class="control-button">⛶</button> <button id="backButton" class="control-button"><strong>← Back</strong></button>
+  <button id="muteToggle" class="control-button">🔇</button>
+  <button id="fullScreenToggle" class="control-button">⛶</button>
+  <button id="backButton" class="control-button">← Back</button>
 
   <script>
     const video = document.getElementById('myVideo');
@@ -219,7 +225,7 @@
 
     muteToggle.addEventListener('click', () => {
       video.muted = !video.muted;
-      muteToggle.textContent = video.muted ? '🔊 Unmute' : '🔇 Mute';
+      muteToggle.textContent = video.muted ? '🔊' : '🔇'; // Change to symbols only
       video.volume = video.muted ? 0 : 1.0;
     });
 
@@ -253,3 +259,4 @@
 
 </body>
 </html>
+
