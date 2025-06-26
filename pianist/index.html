@@ -1,184 +1,192 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Full-Body RoboPianist</title>
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      background: black;
-      font-family: sans-serif;
-      color: white;
-      overflow-y: auto; /* Allow vertical scrolling on the body if content overflows */
-      overflow-x: hidden; /* Prevent horizontal scrolling */
-    }
-    body {
-      position: relative;
-    }
-    video {
-      position: fixed; /* Keep video fixed in background */
-      top: 50%;
-      left: 50%;
-      width: 100vw;
-      height: 100vh;
-      transform: translate(-50%, -50%);
-      object-fit: contain;
-      background: black;
-      z-index: 0;
-      filter: brightness(1.2);
-    }
-    .overlay {
-      position: fixed; /* Keep overlay fixed over video */
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 1;
-    }
-    .content-wrapper { /* New wrapper for content to manage scrolling */
-      position: relative; /* Relative to allow z-index to work */
-      z-index: 2; /* Above video and overlay */
-      min-height: 100vh; /* Ensure it's at least viewport height */
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
-      text-align: center;
-      padding: 0 20px;
-      padding-bottom: 80px; /* Add padding for buttons at bottom */
-      box-sizing: border-box; /* Include padding in height calculation */
-      transition: opacity 0.5s ease-in-out; /* Smooth transition for content */
-    }
-    .content-wrapper.hidden {
-      opacity: 0;
-      pointer-events: none; /* Disable interaction when hidden */
-    }
-    h1 {
-      font-size: 2.5em;
-      margin-top: 60px;
-      margin-bottom: 0.5em;
-    }
-    .training-status {
-      padding: 16px 24px;
-      max-width: 700px;
-      font-size: 0.9em;
-      margin-top: auto; /* Pushes this section to the bottom */
-      margin-bottom: 0; /* Remove bottom margin here, handled by content-wrapper padding */
-    }
-    .perform {
-      padding: 16px 24px;
-      max-width: 700px;
-      font-size: 2.0em;
-      margin-top: 40px;
-      margin-bottom: 40px;
-    }
-    .clickable {
-      cursor: pointer;
-      text-decoration: underline;
-      display: block;
-      margin-top: 6px;
-    }
-    .training-status em,
-    .training-status small {
-      font-size: 0.8em;
-      color: rgba(255, 255, 255, 0.7);
-    }
-    .training-status .note {
-      margin-top: 24px;
-      font-size: 0.75em;
-      color: rgba(255, 255, 255, 0.6);
-    }
-    .footnote {
-      margin-top: 20px;
-      font-size: 0.7em;
-      color: rgba(255, 255, 255, 0.5);
-    }
-    /* Common button styles */
-    .control-button {
-      position: fixed;
-      z-index: 4; /* Ensure buttons are above content-wrapper */
-      background: rgba(0, 0, 0, 0.6);
-      color: white;
-      border: none;
-      padding: 10px 16px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 16px; /* Consistent size for symbols */
-      line-height: 1; /* Helps vertically align symbols within button */
-    }
-    /* Fullscreen button at the very bottom right */
-    #fullScreenToggle {
-      bottom: 20px;
-      right: 20px;
-    }
-    /* Mute button directly above the fullscreen button */
-    #muteToggle {
-      /* Calculate 'bottom' based on #fullScreenToggle's bottom + its estimated height + desired gap */
-      /* Assuming a button height of ~36px (padding 10px*2 + font-size 16px) + 10px gap */
-      bottom: calc(20px + 36px + 10px); /* 20px (fullscreen bottom) + 36px (button height) + 10px (gap) = 66px */
-      right: 20px; /* Align with fullscreen button */
-    }
-    #backButton {
-      top: 10px;
-      left: 0px;
-      display: none; /* Only visible when video is playing */
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Full-Body RoboPianist</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: black;
+      font-family: sans-serif;
+      color: white;
+      overflow-y: auto; /* Allow vertical scrolling on the body if content overflows */
+      overflow-x: hidden; /* Prevent horizontal scrolling */
+    }
+    body {
+      position: relative;
+    }
+    video {
+      position: fixed; /* Keep video fixed in background */
+      top: 50%;
+      left: 50%;
+      width: 100vw;
+      height: 100vh;
+      transform: translate(-50%, -50%);
+      object-fit: contain; /* Changed from 'cover' to 'contain' */
+      background: black;
+      z-index: 0;
+      filter: brightness(1.0); /* Initial brightness */
+    }
+    .overlay {
+      position: fixed; /* Keep overlay fixed over video */
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1;
+    }
+    .content-wrapper { /* New wrapper for content to manage scrolling */
+      position: relative; /* Relative to allow z-index to work */
+      z-index: 2; /* Above video and overlay */
+      min-height: 100vh; /* Ensure it's at least viewport height */
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      text-align: center;
+      padding: 0 20px;
+      padding-bottom: 80px; /* Add padding for buttons at bottom */
+      box-sizing: border-box; /* Include padding in height calculation */
+      transition: opacity 0.5s ease-in-out; /* Smooth transition for content */
+    }
+    .content-wrapper.hidden {
+      opacity: 0;
+      pointer-events: none; /* Disable interaction when hidden */
+    }
+    h1 {
+      font-size: 2.5em;
+      margin-top: 60px;
+      margin-bottom: 0.5em;
+    }
+    .training-status {
+      padding: 16px 24px;
+      max-width: 700px;
+      font-size: 0.9em;
+      margin-top: auto; /* Pushes this section to the bottom */
+      margin-bottom: 0; /* Remove bottom margin here, handled by content-wrapper padding */
+    }
+    .perform {
+      padding: 16px 24px;
+      max-width: 700px;
+      font-size: 2.0em;
+      margin-top: 40px;
+      margin-bottom: 40px;
+    }
+    .clickable {
+      cursor: pointer;
+      text-decoration: underline;
+      display: block;
+      margin-top: 6px;
+    }
+    .training-status em,
+    .training-status small {
+      font-size: 0.8em;
+      color: rgba(255, 255, 255, 0.7);
+    }
+    .training-status .note {
+      margin-top: 24px;
+      font-size: 0.75em;
+      color: rgba(255, 255, 255, 0.6);
+    }
+    .footnote {
+      margin-top: 20px;
+      font-size: 0.7em;
+      color: rgba(255, 255, 255, 0.5);
+    }
+    /* Common button styles */
+    .control-button {
+      position: fixed;
+      z-index: 4; /* Ensure buttons are above content-wrapper */
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px; /* Consistent size for symbols */
+      line-height: 1; /* Helps vertically align symbols within button */
+    }
+    /* Fullscreen button at the very bottom right */
+    #fullScreenToggle {
+      bottom: 20px;
+      right: 20px;
+    }
+    /* Mute button directly above the fullscreen button */
+    #muteToggle {
+      bottom: calc(20px + 36px + 10px); /* 20px (fullscreen bottom) + 36px (button height) + 10px (gap) = 66px */
+      right: 20px; /* Align with fullscreen button */
+    }
+    /* Brightness Up button above the Mute button */
+    #brightnessUp {
+      bottom: calc(66px + 36px + 10px); /* 66px (mute bottom) + 36px (button height) + 10px (gap) = 112px */
+      right: 20px;
+    }
+    /* Brightness Down button above the Brightness Up button */
+    #brightnessDown {
+      bottom: calc(112px + 36px + 10px); /* 112px (brightness up bottom) + 36px (button height) + 10px (gap) = 158px */
+      right: 20px;
+    }
+    #backButton {
+      top: 20px;
+      left: 20px;
+      display: none; /* Only visible when video is playing */
+    }
+  </style>
 </head>
 <body>
 
-  <video id="myVideo" autoplay muted loop playsinline>
-    <source id="videoSource" src="twinkle_twinkle.mp4" type="video/mp4" />
-    Your browser does not support the video tag.
-  </video>
+  <video id="myVideo" autoplay muted loop playsinline>
+    <source id="videoSource" src="twinkle_twinkle.mp4" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
 
-  <div class="overlay"></div>
+  <div class="overlay"></div>
 
-  <div class="content-wrapper">
-    <div class="content"> <h1>Welcome to the<br>Full-Body RoboPianist</h1>
-      
-      <div class="perform">
-        <h3>Watch the robot perform:</h3>
-        <span class="clickable" data-src="twinkle_twinkle.mp4">Twinkle Twinkle<br>(fully learned)</span>
-      </div>
+  <div class="content-wrapper">
+    <div class="content"> <h1>Welcome to the<br>Full-Body RoboPianist</h1>
 
-      <div class="training-status">
-          <hr style="margin: 20px auto; width: 60%; border: 0; border-top: 1px solid rgba(255,255,255,0.3);">
+      <div class="perform">
+        <h3>Watch the robot perform:</h3>
+        <span class="clickable" data-src="twinkle_twinkle.mp4">Twinkle Twinkle (fully learned)</span>
+      </div>
 
-        <strong>Training in Progress</strong><br>
-        Our robot is currently learning new pieces:<br>
-        <span class="clickable" data-src="my_favorite_things.mp4">My Favorite Things</span>
-        <span class="clickable" data-src="bach_invention4.mp4">Bach – Invention No. 4</span>
-        <span class="clickable" data-src="tchaikovsky_new_puppet.mp4">Tchaikovsky – New Puppet</span>
-        <span class="clickable" data-src="chopin_prelude.mp4">Chopin – Prelude</span>
-        <span class="clickable" data-src="mozart_funeral_march.mp4">Mozart – Funeral March</span>
-        <span class="clickable" data-src="time_to_pretend.mp4">MGMT – Time to Pretend</span>
-        <span class="clickable" data-src="diabelli_sonatina.mp4">Diabelli – Sonatina</span>
+      <div class="training-status">
+          <hr style="margin: 20px auto; width: 60%; border: 0; border-top: 1px solid rgba(255,255,255,0.3);">
 
-        <div class="note">
-          <strong>Please note:</strong><br>
-          Only <em>Twinkle Twinkle</em> shows a complete performance<br>
-          after the robot has fully mastered the piece.<br>
-          The other videos show the robot <em>still in the process of learning</em>.<br><br>
-          <em>Improved and polished recordings will be added soon!</em>
-        </div>
+        <strong>Training in Progress</strong><br>
+        Our robot is currently learning new pieces:<br>
+        <span class="clickable" data-src="my_favorite_things.mp4">My Favorite Things</span>
+        <span class="clickable" data-src="bach_invention4.mp4">Bach – Invention No. 4</span>
+        <span class="clickable" data-src="tchaikovsky_new_puppet.mp4">Tchaikovsky – New Puppet</span>
+        <span class="clickable" data-src="chopin_prelude.mp4">Chopin – Prelude</span>
+        <span class="clickable" data-src="mozart_funeral_march.mp4">Mozart – Funeral March</span>
+        <span class="clickable" data-src="time_to_pretend.mp4">MGMT – Time to Pretend</span>
+        <span class="clickable" data-src="diabelli_sonatina.mp4">Diabelli – Sonatina</span>
 
-        <div class="footnote">
-          The full code for this project will be published soon on GitHub: <a href="https://github.com/DarthAlexus96" target="_blank" style="color: rgba(255, 255, 255, 0.7);">DarthAlexus96</a>
-        </div>
-      </div>
-    </div> </div> <button id="muteToggle" class="control-button">🔇</button>
-  <button id="fullScreenToggle" class="control-button">⛶</button>
-  <button id="backButton" class="control-button">← Back</button>
-<button id="brightnessUp" class="control-button">+</button>
-<button id="brightnessDown" class="control-button">-</button>
+        <div class="note">
+          <strong>Please note:</strong><br>
+          Only <em>Twinkle Twinkle</em> shows a complete performance<br>
+          after the robot has fully mastered the piece.<br>
+          The other videos show the robot <em>still in the process of learning</em>.<br><br>
+          <em>Improved and polished recordings will be added soon!</em>
+        </div>
 
-  <script>
-    const video = document.getElementById('myVideo');
+        <div class="footnote">
+          The full code for this project will be published soon on GitHub: <a href="https://github.com/DarthAlexus96" target="_blank" style="color: rgba(255, 255, 255, 0.7);">DarthAlexus96</a>
+        </div>
+      </div>
+    </div> </div> <button id="brightnessUp" class="control-button">🔆</button>
+  <button id="brightnessDown" class="control-button">🔅</button>
+  <button id="muteToggle" class="control-button">🔊</button>
+  <button id="fullScreenToggle" class="control-button">⛶</button>
+  <button id="backButton" class="control-button">← Back</button>
+
+  <script>
+    const video = document.getElementById('myVideo');
     const source = document.getElementById('videoSource');
     const muteToggle = document.getElementById('muteToggle');
     const fullScreenToggle = document.getElementById('fullScreenToggle');
@@ -193,30 +201,27 @@
     let currentBrightness = 1.0; // Start with a normal brightness (100%)
 
     function showContent() {
+      // Only show the main content and hide the controls
       contentWrapperDiv.classList.remove('hidden');
       backButton.style.display = 'none';
-      muteToggle.style.display = 'block';
-      fullScreenToggle.style.display = 'none';
+      muteToggle.style.display = 'none'; // Hide when content is visible
+      fullScreenToggle.style.display = 'none'; // Hide when content is visible
       brightnessUpButton.style.display = 'none'; // Hide brightness controls
       brightnessDownButton.style.display = 'none';
 
-      // Restore the last known mute state
+      // Restore the last known mute state and play the background video
       video.muted = isMuted;
-      muteToggle.textContent = video.muted ? '🔇' : '🔊';
-
-      video.pause();
-      video.currentTime = 0;
-      source.src = "twinkle_twinkle.mp4";
-      video.load();
+      muteToggle.textContent = video.muted ? '🔊' : '🔇';
       video.play();
     }
 
     function hideContent() {
+      // Hide the main content and show the video controls
       contentWrapperDiv.classList.add('hidden');
       backButton.style.display = 'block';
       muteToggle.style.display = 'block';
       fullScreenToggle.style.display = 'block';
-      brightnessUpButton.style.display = 'block'; // Show brightness controls
+      brightnessUpButton.style.display = 'block';
       brightnessDownButton.style.display = 'block';
     }
 
@@ -231,12 +236,14 @@
     });
 
     backButton.addEventListener('click', () => {
+      // This is the fix. We don't reset the video, we just show the content again.
+      // We will also hide the control buttons for the user to be able to navigate the site again
       showContent();
     });
 
     muteToggle.addEventListener('click', () => {
       video.muted = !video.muted;
-      muteToggle.textContent = video.muted ? '🔇' : '🔊';
+      muteToggle.textContent = video.muted ? '🔊' : '🔇';
       video.volume = video.muted ? 0 : 1.0;
       // Update the stored state
       isMuted = video.muted;
@@ -266,17 +273,24 @@
 
     // Handle fullscreen changes (e.g., if user exits fullscreen via ESC key)
     document.addEventListener('fullscreenchange', () => {
-        if (!document.fullscreenElement) {
-            // Nothing to do here for now, as the filter remains on the video
+      if (!document.fullscreenElement) {
+        // When exiting fullscreen, we ensure the buttons are visible
+        // if a specific video is playing.
+        if (contentWrapperDiv.classList.contains('hidden')) {
+          backButton.style.display = 'block';
+          muteToggle.style.display = 'block';
+          fullScreenToggle.style.display = 'block';
+          brightnessUpButton.style.display = 'block';
+          brightnessDownButton.style.display = 'block';
         }
+      }
     });
-
+    
     // Initial state setup
     document.addEventListener('DOMContentLoaded', () => {
         showContent(); // Ensures all buttons are in correct initial state
     });
-
-  </script>
+  </script>
 
 </body>
 </html>
