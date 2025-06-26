@@ -1,78 +1,287 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About</title>
-    <link rel="stylesheet" href="index.css">
-    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Full-Body RoboPianist</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: black;
+      font-family: sans-serif;
+      color: white;
+      overflow-y: auto; /* Allow vertical scrolling on the body if content overflows */
+      overflow-x: hidden; /* Prevent horizontal scrolling */
+    }
+    body {
+      position: relative;
+    }
+    video {
+      position: fixed; /* Keep video fixed in background */
+      top: 50%;
+      left: 50%;
+      width: 100vw;
+      height: 100vh;
+      transform: translate(-50%, -50%);
+      object-fit: contain; /* Changed from 'cover' to 'contain' */
+      background: black;
+      z-index: 0;
+      filter: brightness(1.0); /* Initial brightness */
+    }
+    .overlay {
+      position: fixed; /* Keep overlay fixed over video */
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1;
+    }
+    .content-wrapper { /* New wrapper for content to manage scrolling */
+      position: relative; /* Relative to allow z-index to work */
+      z-index: 2; /* Above video and overlay */
+      min-height: 100vh; /* Ensure it's at least viewport height */
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      text-align: center;
+      padding: 0 20px;
+      padding-bottom: 80px; /* Add padding for buttons at bottom */
+      box-sizing: border-box; /* Include padding in height calculation */
+      transition: opacity 0.5s ease-in-out; /* Smooth transition for content */
+    }
+    .content-wrapper.hidden {
+      opacity: 0;
+      pointer-events: none; /* Disable interaction when hidden */
+    }
+    h1 {
+      font-size: 2.5em;
+      margin-top: 60px;
+      margin-bottom: 0.5em;
+    }
+    .training-status {
+      padding: 16px 24px;
+      max-width: 700px;
+      font-size: 0.9em;
+      margin-top: auto; /* Pushes this section to the bottom */
+      margin-bottom: 0; /* Remove bottom margin here, handled by content-wrapper padding */
+    }
+    .perform {
+      padding: 16px 24px;
+      max-width: 700px;
+      font-size: 2.0em;
+      margin-top: 40px;
+      margin-bottom: 40px;
+    }
+    .clickable {
+      cursor: pointer;
+      text-decoration: underline;
+      display: block;
+      margin-top: 6px;
+    }
+    .training-status em,
+    .training-status small {
+      font-size: 0.8em;
+      color: rgba(255, 255, 255, 0.7);
+    }
+    .training-status .note {
+      margin-top: 24px;
+      font-size: 0.75em;
+      color: rgba(255, 255, 255, 0.6);
+    }
+    .footnote {
+      margin-top: 20px;
+      font-size: 0.7em;
+      color: rgba(255, 255, 255, 0.5);
+    }
+    
+    /* Common button styles */
+    .control-button {
+      z-index: 4; /* Ensure buttons are above content-wrapper */
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px; /* Consistent size for symbols */
+      line-height: 1; /* Helps vertically align symbols within button */
+      margin-top: 10px; /* Add some space between stacked buttons */
+    }
+    
+    /* New container for the buttons at the bottom right */
+    .control-buttons-container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      display: flex;
+      flex-direction: column-reverse; /* Stacks items from the bottom up */
+      align-items: flex-end; /* Aligns items to the right */
+      z-index: 4;
+    }
+    
+    /* Back button is separate as it's at the top-left */
+    #backButton {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      display: none; /* Only visible when video is playing */
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <nav class="navbar">
-            <div class="nav-logo">
-                <a href="http://darthalexus.com">
-                    <img src="home.png" alt="Home" height="25" width="25">
-                    DarthAlexus
-                </a>
-            </div>
-            <ul class="nav-links">
-                <li><a href="http://darthalexus.com">Home</a></li>
-                <!--<li><a href="about.html">About</a></li>-->
-                <li><a href="pianist/index.html">RoboPianist</a></li>
-                <!--<li><a href="jerry.html">Jerry</a></li>--<
-                <!--<li><a href="#connect">Connect</a></li>
-                <li><a href="#contact">Contact</a></li>-->
-            </ul>
-        </nav>
-    </header>
-    
-    <main>
-        <section id="about" class="about-section">
-            <div class="about-content">
-                <img src="jerry.png" alt="Profile Picture" class="profile-img">
-                <div class="about-text">
-                    <h3>Hi, my name is DarthAlexus.</h3>
-                    <!--<h3>My name is DarthAlexus.</h3>-->
-                    <p>
-                      This site is currently under construction.<br>
-                      <br>
-                      Will there ever be a real website?
-                    </p>
-                      Nobody knows.
-                    <!--Who knows if there will ever be a real website?
-                    </p>
-                      Nobody does. But then again: Nobody cares.
-                    <p>
-                      This is mainly just a little <b>joke project</b> of mine.<br>
-                      It's whole purpose - for now - is providing me with a platform <br>
-                      to experiment around with some simple web programming stuff.
-                    </p>-->
-                </div>
-            </div>
-        </section>
-        
-        <section id="connect" class="connect-section">
-            <div class="social-links">
-                
-                <a href="http://open.spotify.com/user/1132953857" target="_blank">
-                    <img src="spotify_logo.png" alt="Spotify" class="social-icon">
-                </a>
-                <a href="http://github.com/DarthAlexus96" target="_blank">
-                    <img src="github.png" alt="GitHub" class="social-icon">
-                </a>
-                <!--<a href="https://www.sololearn.com/Profile/7072030" target="_blank">
-                    <img src="sololearn.png" alt="SoloLearn" class="social-icon">
-                </a>
-                <a href="https://www.deviantart.com/darthalexus" target="_blank">
-                    <img src="deviant.png" alt="DeviantArt" class="social-icon">-->
-                </a>
-            </div>
-        </section>
-    </main>
-    
-    <footer id="contact" class="footer">
-        <p>Contact: <a href="mailto:admin@darthalexus.com">admin@darthalexus.com</a></p>
-    </footer>
+
+  <video id="myVideo" autoplay muted loop playsinline>
+    <source id="videoSource" src="twinkle_twinkle.mp4" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+
+  <div class="overlay"></div>
+
+  <div class="content-wrapper">
+    <div class="content"> <h1>Welcome to the<br>Full-Body RoboPianist</h1>
+
+      <div class="perform">
+        <h3>Watch the robot perform:</h3>
+        <span class="clickable" data-src="twinkle_twinkle.mp4">Twinkle Twinkle (fully learned)</span>
+      </div>
+
+      <div class="training-status">
+          <hr style="margin: 20px auto; width: 60%; border: 0; border-top: 1px solid rgba(255,255,255,0.3);">
+
+        <strong>Training in Progress</strong><br>
+        Our robot is currently learning new pieces:<br>
+        <span class="clickable" data-src="my_favorite_things.mp4">My Favorite Things</span>
+        <span class="clickable" data-src="bach_invention4.mp4">Bach – Invention No. 4</span>
+        <span class="clickable" data-src="tchaikovsky_new_puppet.mp4">Tchaikovsky – New Puppet</span>
+        <span class="clickable" data-src="chopin_prelude.mp4">Chopin – Prelude</span>
+        <span class="clickable" data-src="mozart_funeral_march.mp4">Mozart – Funeral March</span>
+        <span class="clickable" data-src="time_to_pretend.mp4">MGMT – Time to Pretend</span>
+        <span class="clickable" data-src="diabelli_sonatina.mp4">Diabelli – Sonatina</span>
+
+        <div class="note">
+          <strong>Please note:</strong><br>
+          Only <em>Twinkle Twinkle</em> shows a complete performance<br>
+          after the robot has fully mastered the piece.<br>
+          The other videos show the robot <em>still in the process of learning</em>.<br><br>
+          <em>Improved and polished recordings will be added soon!</em>
+        </div>
+
+        <div class="footnote">
+          The full code for this project will be published soon on GitHub: <a href="https://github.com/DarthAlexus96" target="_blank" style="color: rgba(255, 255, 255, 0.7);">DarthAlexus96</a>
+        </div>
+      </div>
+    </div> </div> 
+
+<div class="control-buttons-container">
+  <button id="brightnessUp" class="control-button">🔆</button>
+  <button id="brightnessDown" class="control-button">🔅</button>
+  <button id="muteToggle" class="control-button">🔊</button>
+  <button id="fullScreenToggle" class="control-button">⛶</button>
+</div>
+<button id="backButton" class="control-button">← Back</button>
+
+  <script>
+    const video = document.getElementById('myVideo');
+    const source = document.getElementById('videoSource');
+    const muteToggle = document.getElementById('muteToggle');
+    const fullScreenToggle = document.getElementById('fullScreenToggle');
+    const contentWrapperDiv = document.querySelector('.content-wrapper');
+    const backButton = document.getElementById('backButton');
+    const brightnessUpButton = document.getElementById('brightnessUp');
+    const brightnessDownButton = document.getElementById('brightnessDown');
+    const controlButtonsContainer = document.querySelector('.control-buttons-container');
+
+    // Store the last known mute state
+    let isMuted = true;
+    // Store the current brightness value
+    let currentBrightness = 1.0; // Start with a normal brightness (100%)
+
+    function showContent() {
+      // Only show the main content and hide the controls
+      contentWrapperDiv.classList.remove('hidden');
+      backButton.style.display = 'none';
+      controlButtonsContainer.style.display = 'none'; // Hide the entire container
+      
+      // Restore the last known mute state and play the background video
+      video.muted = isMuted;
+      muteToggle.textContent = video.muted ? '🔊' : '🔇';
+      video.play();
+    }
+
+    function hideContent() {
+      // Hide the main content and show the video controls
+      contentWrapperDiv.classList.add('hidden');
+      backButton.style.display = 'block';
+      controlButtonsContainer.style.display = 'flex'; // Show the entire container
+    }
+
+    document.querySelectorAll('.clickable').forEach(el => {
+      el.addEventListener('click', () => {
+        const newSrc = el.getAttribute('data-src');
+        source.src = newSrc;
+        video.load();
+        video.play();
+        hideContent();
+      });
+    });
+
+    backButton.addEventListener('click', () => {
+      // This is the fix. We don't reset the video, we just show the content again.
+      // We will also hide the control buttons for the user to be able to navigate the site again
+      showContent();
+    });
+
+    muteToggle.addEventListener('click', () => {
+      video.muted = !video.muted;
+      muteToggle.textContent = video.muted ? '🔊' : '🔇';
+      video.volume = video.muted ? 0 : 1.0;
+      // Update the stored state
+      isMuted = video.muted;
+    });
+
+    fullScreenToggle.addEventListener('click', () => {
+      if (video.requestFullscreen) {
+        video.requestFullscreen();
+      } else if (video.webkitRequestFullscreen) {
+        video.webkitRequestFullscreen();
+      } else if (video.msRequestFullscreen) {
+        video.msRequestFullscreen();
+      }
+    });
+
+    brightnessUpButton.addEventListener('click', () => {
+      // Increase brightness by 0.1, up to a max of 2.0 (200%)
+      currentBrightness = Math.min(currentBrightness + 0.1, 2.0);
+      video.style.filter = `brightness(${currentBrightness})`;
+    });
+
+    brightnessDownButton.addEventListener('click', () => {
+      // Decrease brightness by 0.1, down to a min of 0.5 (50%)
+      currentBrightness = Math.max(currentBrightness - 0.1, 0.5);
+      video.style.filter = `brightness(${currentBrightness})`;
+    });
+
+    // Handle fullscreen changes (e.g., if user exits fullscreen via ESC key)
+    document.addEventListener('fullscreenchange', () => {
+      if (!document.fullscreenElement) {
+        // When exiting fullscreen, we ensure the buttons are visible
+        // if a specific video is playing.
+        if (contentWrapperDiv.classList.contains('hidden')) {
+          backButton.style.display = 'block';
+          controlButtonsContainer.style.display = 'flex';
+        }
+      }
+    });
+    
+    // Initial state setup
+    document.addEventListener('DOMContentLoaded', () => {
+        showContent(); // Ensures all buttons are in correct initial state
+    });
+  </script>
+
 </body>
 </html>
