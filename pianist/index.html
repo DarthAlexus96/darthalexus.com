@@ -174,6 +174,8 @@
     </div> </div> <button id="muteToggle" class="control-button">🔇</button>
   <button id="fullScreenToggle" class="control-button">⛶</button>
   <button id="backButton" class="control-button">← Back</button>
+<button id="brightnessUp" class="control-button">+</button>
+<button id="brightnessDown" class="control-button">-</button>
 
   <script>
     const video = document.getElementById('myVideo');
@@ -182,23 +184,29 @@
     const fullScreenToggle = document.getElementById('fullScreenToggle');
     const contentWrapperDiv = document.querySelector('.content-wrapper');
     const backButton = document.getElementById('backButton');
+    const brightnessUpButton = document.getElementById('brightnessUp');
+    const brightnessDownButton = document.getElementById('brightnessDown');
 
     // Store the last known mute state
     let isMuted = true;
+    // Store the current brightness value
+    let currentBrightness = 1.0; // Start with a normal brightness (100%)
 
     function showContent() {
       contentWrapperDiv.classList.remove('hidden');
       backButton.style.display = 'none';
-      muteToggle.style.display = 'block'; // Mute button always visible
-      fullScreenToggle.style.display = 'none'; // Hide fullscreen button when content is shown
-      
-      // Restore the last known mute state, don't just mute it
+      muteToggle.style.display = 'block';
+      fullScreenToggle.style.display = 'none';
+      brightnessUpButton.style.display = 'none'; // Hide brightness controls
+      brightnessDownButton.style.display = 'none';
+
+      // Restore the last known mute state
       video.muted = isMuted;
-      muteToggle.textContent = video.muted ? '🔊' : '🔇';
+      muteToggle.textContent = video.muted ? '🔇' : '🔊';
 
       video.pause();
       video.currentTime = 0;
-      source.src = "twinkle_twinkle.mp4"; // Reset to default background video
+      source.src = "twinkle_twinkle.mp4";
       video.load();
       video.play();
     }
@@ -206,8 +214,10 @@
     function hideContent() {
       contentWrapperDiv.classList.add('hidden');
       backButton.style.display = 'block';
-      muteToggle.style.display = 'block'; // Mute button always visible
-      fullScreenToggle.style.display = 'block'; // Show fullscreen button when content is hidden (video playing)
+      muteToggle.style.display = 'block';
+      fullScreenToggle.style.display = 'block';
+      brightnessUpButton.style.display = 'block'; // Show brightness controls
+      brightnessDownButton.style.display = 'block';
     }
 
     document.querySelectorAll('.clickable').forEach(el => {
@@ -215,7 +225,6 @@
         const newSrc = el.getAttribute('data-src');
         source.src = newSrc;
         video.load();
-        // Do not change muted state here. Let the user decide with the mute button.
         video.play();
         hideContent();
       });
@@ -227,7 +236,7 @@
 
     muteToggle.addEventListener('click', () => {
       video.muted = !video.muted;
-      muteToggle.textContent = video.muted ? '🔊' : '🔇'; // Change to symbols only
+      muteToggle.textContent = video.muted ? '🔇' : '🔊';
       video.volume = video.muted ? 0 : 1.0;
       // Update the stored state
       isMuted = video.muted;
@@ -236,21 +245,29 @@
     fullScreenToggle.addEventListener('click', () => {
       if (video.requestFullscreen) {
         video.requestFullscreen();
-      } else if (video.webkitRequestFullscreen) { /* Safari */
+      } else if (video.webkitRequestFullscreen) {
         video.webkitRequestFullscreen();
-      } else if (video.msRequestFullscreen) { /* IE11 */
+      } else if (video.msRequestFullscreen) {
         video.msRequestFullscreen();
       }
+    });
+
+    brightnessUpButton.addEventListener('click', () => {
+      // Increase brightness by 0.1, up to a max of 2.0 (200%)
+      currentBrightness = Math.min(currentBrightness + 0.1, 2.0);
+      video.style.filter = `brightness(${currentBrightness})`;
+    });
+
+    brightnessDownButton.addEventListener('click', () => {
+      // Decrease brightness by 0.1, down to a min of 0.5 (50%)
+      currentBrightness = Math.max(currentBrightness - 0.1, 0.5);
+      video.style.filter = `brightness(${currentBrightness})`;
     });
 
     // Handle fullscreen changes (e.g., if user exits fullscreen via ESC key)
     document.addEventListener('fullscreenchange', () => {
         if (!document.fullscreenElement) {
-            // When exiting fullscreen, we want the video to continue playing
-            // in its current view with controls.
-            // No explicit action is needed here because hideContent() already ensures
-            // mute and fullscreen buttons are visible when a specific video is playing,
-            // and the video itself continues playback.
+            // Nothing to do here for now, as the filter remains on the video
         }
     });
 
