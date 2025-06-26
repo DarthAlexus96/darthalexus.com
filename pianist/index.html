@@ -170,7 +170,7 @@
           The full code for this project will be published soon on GitHub: <a href="https://github.com/DarthAlexus96" target="_blank" style="color: rgba(255, 255, 255, 0.7);">DarthAlexus96</a>
         </div>
       </div>
-    </div> </div> <button id="muteToggle" class="control-button">🔊</button>
+    </div> </div> <button id="muteToggle" class="control-button">🔇</button>
   <button id="fullScreenToggle" class="control-button">⛶</button>
   <button id="backButton" class="control-button">← Back</button>
 
@@ -219,7 +219,7 @@
 
     muteToggle.addEventListener('click', () => {
       video.muted = !video.muted;
-      muteToggle.textContent = video.muted ? '🔊' : '🔇'; // Change to symbols only
+      muteToggle.textContent = video.muted ? '🔇' : '🔊'; // Change to symbols only
       video.volume = video.muted ? 0 : 1.0;
     });
 
