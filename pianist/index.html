@@ -30,16 +30,18 @@
       z-index: 0;
       cursor: pointer;
     }
-    video.hidden {
-      opacity: 0.5;
+    /* This class is now used to control the opacity of the background video */
+    video.background-video {
+      opacity: 0.25; /* A low opacity value to make it barely visible */
     }
+    /* The overlay now has a slightly higher opacity to make the content more readable */
     .overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(0, 0, 0, 0.7);
       z-index: 1;
       pointer-events: none;
     }
@@ -132,13 +134,12 @@
       top: 20px;
       left: 20px;
     }
-    
   </style>
 </head>
 <body>
 
-  <video id="myVideo" autoplay muted loop playsinline>
-    <source id="videoSource" src="twinkle_twinkle.mp4" type="video/mp4" />
+  <video id="myVideo" autoplay muted loop playsinline class="background-video">
+    <source id="videoSource" src="videos/twinkle_twinkle.mp4" type="video/mp4" />
     Your browser does not support the video tag.
   </video>
 
@@ -188,77 +189,90 @@
     const fullScreenToggle = document.getElementById('fullScreenToggle');
     const contentWrapperDiv = document.querySelector('.content-wrapper');
     const backButton = document.getElementById('backButton');
+    const initialVideoSrc = "videos/twinkle_twinkle.mp4"; // Store the default background video source
 
-    let isVideoPlaying = false; // Track the video state
+    let isVideoPlaying = false; // Track if a specific video is selected to play
+    let isMuted = video.muted; // Track the mute state, initialized from the video's default state
 
+    // Function to update the mute button icon
+    function updateMuteToggleIcon() {
+      muteToggle.textContent = video.muted ? '🔇' : '🔊';
+    }
 
-    function showContent() {
-      contentWrapperDiv.classList.remove('hidden');
-      
-      // Control button visibility for the main menu
-      muteToggle.style.display = 'block';
+    // Function to set the video as a barely visible background
+    function setAsBackgroundVideo() {
+      // Ensure the video is always visible
+      video.style.display = 'block';
+      // Add the class for low opacity
+      video.classList.add('background-video');
+      // Set the video source to the default background video and mute it
+      <!--
+      source.src = initialVideoSrc;
+      video.load();
+      video.muted = true;
+      -->
+      video.play();
+      // Hide specific video controls
       fullScreenToggle.style.display = 'none';
       backButton.style.display = 'none';
-      video.style.display = 'none'
-      
-      // Stop the specific video and reset the background video
-      video.pause();
-      video.currentTime = 0;
-      source.src = "videos/twinkle_twinkle.mp4";
+      // Show the content wrapper
+      contentWrapperDiv.classList.remove('hidden');
+      // Update mute toggle icon
+      updateMuteToggleIcon();
+    }
+
+    // Function to play a selected video in the foreground
+    function playSelectedVideo(src) {
+      // Remove the low opacity class
+      video.classList.remove('background-video');
+      // Set the source to the selected video
+      source.src = src;
       video.load();
-      video.muted = true; // Ensure background video is muted
+      // Restore the user's last mute setting
+      video.muted = false;
+      // video.muted = isMuted;
       video.play();
-      isVideoPlaying = false;
+      // Hide the content wrapper
+      contentWrapperDiv.classList.add('hidden');
+      // Show specific video controls
+      fullScreenToggle.style.display = 'block';
+      backButton.style.display = 'block';
+      // Update mute toggle icon
+      updateMuteToggleIcon();
     }
 
-    function showVideoControls() {
-        // Control button visibility for when a specific video is playing
-        muteToggle.style.display = 'block';
-        fullScreenToggle.style.display = 'block';
-        backButton.style.display = 'block';
-    }
+    // --- Event Listeners ---
 
-    // --- Core Logic for Play/Pause and Transitions ---
-
+    // Handle clicks on the video links
     document.querySelectorAll('.clickable').forEach(el => {
       el.addEventListener('click', () => {
         const newSrc = el.getAttribute('data-src');
-        source.src = newSrc;
-        video.load();
-        video.muted = false; // Unmute when a specific video is selected
-        video.play();
         isVideoPlaying = true;
-        contentWrapperDiv.classList.add('hidden');
-        showVideoControls();
+        playSelectedVideo(newSrc);
       });
     });
 
+    // Handle the "Back" button click
     backButton.addEventListener('click', () => {
-      // Pause the video when the back button is clicked
-      video.pause(); 
-      isVideoPlaying = false;
-      showContent();
-      // Exit fullscreen if it's active
+      isVideoPlaying = true;
+      // Revert the video back to the barely visible background state
+      setAsBackgroundVideo();
+      // Exit fullscreen if active
       if (document.fullscreenElement) {
-          document.exitFullscreen();
+        document.exitFullscreen();
       }
     });
 
-    // Toggle play/pause on video click
-    video.addEventListener('click', () => {
-        if (isVideoPlaying) { // Only toggle if a specific video is being played, not the background video
-            if (video.paused) {
-                video.play();
-            } else {
-                video.pause();
-            }
-        }
+    // Handle mute/unmute toggle
+    muteToggle.addEventListener('click', () => {
+      // Toggle the mute state and store it
+      isMuted = !video.muted;
+      video.muted = isMuted;
+      updateMuteToggleIcon();
     });
 
-    // --- Fullscreen and Control Visibility ---
-
+    // Handle fullscreen toggle
     fullScreenToggle.addEventListener('click', () => {
-      // Request fullscreen for the body so the buttons can stay on top.
       if (document.body.requestFullscreen) {
         document.body.requestFullscreen();
       } else if (document.body.webkitRequestFullscreen) {
@@ -268,29 +282,19 @@
       }
     });
 
+    // Handle exiting fullscreen
     document.addEventListener('fullscreenchange', () => {
-        if (document.fullscreenElement) {
-            // Entered fullscreen
-            showVideoControls();
-        } else {
-            // Exited fullscreen
-            if (isVideoPlaying) {
-                // If a specific video was playing, pause it and return to the main screen
-                video.pause();
-                showContent();
-            }
-        }
+      if (!document.fullscreenElement) {
+        // When exiting fullscreen, revert back to the background video state
+        setAsBackgroundVideo();
+      }
     });
 
-    // --- Mute/Unmute Logic ---
-
-    muteToggle.addEventListener('click', () => {
-      video.muted = !video.muted;
-      muteToggle.textContent = video.muted ? '🔊' : '🔇';
-      // Ensure the volume property is updated
-      video.volume = video.muted ? 0 : 1.0;
+    // Initial setup on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      // Ensure the video is set as a background on first load
+      setAsBackgroundVideo();
     });
-    
   </script>
 
 </body>
